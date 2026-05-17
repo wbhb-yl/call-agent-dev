@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Call Agent</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+
+    <!-- 사이드바 -->
+    <aside class="sidebar">
+      <h1 class="logo">Call Agent</h1>
+
+      <!-- 에이전트 상태 -->
+      <div class="status-card">
+        <div class="status-label">에이전트 상태</div>
+        <div class="status-badge" id="agentStatus">IDLE</div>
+      </div>
+
+      <!-- 전화 UI -->
+      <div class="call-card">
+        <input class="callee-input" id="calleeInput" placeholder="이름 또는 번호 입력" />
+
+        <!-- 전화 아이콘 애니메이션 -->
+        <div class="phone-avatar" id="phoneAvatar">
+          <div class="ring-wave" id="ringWave1"></div>
+          <div class="ring-wave" id="ringWave2"></div>
+          <div class="ring-wave" id="ringWave3"></div>
+          <div class="avatar-circle" id="avatarCircle">
+            <span class="avatar-icon" id="avatarIcon">📵</span>
+          </div>
+        </div>
+
+        <div class="caller-info" id="callerInfo">대기 중...</div>
+        <div class="call-duration hidden" id="callDuration">00:00</div>
+
+        <div class="call-buttons">
+          <button class="btn-call" id="callBtnFriend" onclick="startCall('friend')">친구 응답</button>
+          <button class="btn-call btn-absent" id="callBtnAbsent" onclick="startCall('absent')">부재중</button>
+          <button class="btn-hangup hidden" id="hangupBtn" onclick="endCall()">종료</button>
+        </div>
+        <div class="mic-status hidden" id="micStatus">
+          <span class="mic-dot"></span> 듣는 중...
+        </div>
+      </div>
+
+      <!-- 등록된 일정 -->
+      <div class="calendar-card">
+        <div class="section-title">등록된 일정</div>
+        <ul class="event-list" id="eventList">
+          <li class="empty">등록된 일정 없음</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- 메인 대시보드 -->
+    <main class="main">
+
+      <!-- 보이스피싱 경고 배너 -->
+      <div class="alert-banner hidden" id="alertBanner">
+        <span class="alert-icon">⚠️</span>
+        <span id="alertText">보이스피싱 의심 통화가 감지되었습니다. 에이전트가 대응 중입니다.</span>
+      </div>
+
+      <!-- 핸드폰 모양 대화 화면 -->
+      <div class="phone-wrapper">
+        <div class="phone-frame">
+          <!-- 상단 노치 -->
+          <div class="phone-top">
+            <div class="phone-speaker"></div>
+            <div class="phone-camera"></div>
+          </div>
+
+          <!-- 통화 상태 표시 -->
+          <div class="phone-call-status">
+            <div class="phone-caller-name" id="phoneCallerName">대기 중</div>
+            <div class="phone-call-info" id="phoneChatMode"></div>
+            <div class="phone-call-time hidden" id="phoneCallTime">00:00</div>
+          </div>
+
+          <!-- 대화 내용 -->
+          <div class="phone-messages" id="chatMessages">
+            <div class="chat-empty">통화가 시작되면<br/>대화 내용이 표시됩니다.</div>
+          </div>
+
+          <!-- 하단 버튼 영역 -->
+          <div class="phone-bottom-bar">
+            <div class="phone-home-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- API 키 입력 -->
+      <div class="api-key-bar">
+        <label>Anthropic</label>
+        <input type="password" id="apiKeyInput" placeholder="sk-ant-..." />
+        <button onclick="saveApiKey('anthropic')">저장</button>
+
+        <label style="margin-left:12px">ElevenLabs</label>
+        <input type="password" id="elevenKeyInput" placeholder="API Key" />
+        <button onclick="saveApiKey('eleven')">저장</button>
+
+        <label style="margin-left:8px">에이전트</label>
+        <select id="voiceSelect" onchange="saveVoice('agent')">
+          <option value="pNInz6obpgDQGcFmaJgB">Adam (남성)</option>
+          <option value="EXAVITQu4vr4xnSDxMaL">Bella (여성)</option>
+          <option value="custom_agent">직접 입력</option>
+        </select>
+        <input type="text" id="customAgentVoiceInput" placeholder="Agent Voice ID" class="hidden" style="width:130px" />
+
+        <label style="margin-left:8px">친구</label>
+        <select id="friendVoiceSelect" onchange="saveVoice('friend')">
+          <option value="pNInz6obpgDQGcFmaJgB">Adam (남성)</option>
+          <option value="EXAVITQu4vr4xnSDxMaL">Bella (여성)</option>
+          <option value="custom_friend">직접 입력</option>
+        </select>
+        <input type="text" id="customFriendVoiceInput" placeholder="Friend Voice ID" class="hidden" style="width:130px" />
+
+        <button onclick="testElevenLabs()">목소리 테스트</button>
+        <span class="api-key-status" id="apiKeyStatus"></span>
+      </div>
+    </main>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,523 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0f0f0f;
+  color: #e0e0e0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app {
+  display: flex;
+  height: 100vh;
+}
+
+/* 사이드바 */
+.sidebar {
+  width: 280px;
+  background: #1a1a1a;
+  border-right: 1px solid #2a2a2a;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+/* 상태 카드 */
+.status-card {
+  background: #222;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-label {
+  font-size: 13px;
+  color: #888;
+}
+
+.status-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: #333;
+  color: #aaa;
+  transition: all 0.3s;
+}
+
+.status-badge.MONITORING { background: #1a3a2a; color: #4caf82; }
+.status-badge.TAKEOVER   { background: #3a1a1a; color: #f44336; }
+.status-badge.ASSIST     { background: #1a2a3a; color: #42a5f5; }
+.status-badge.CALENDAR   { background: #2a2a1a; color: #ffb74d; }
+
+/* 전화 카드 */
+.call-card {
+  background: #222;
+  border-radius: 12px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+
+.callee-input {
+  width: 100%;
+  background: #2a2a2a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: #ddd;
+  font-size: 14px;
+  outline: none;
+  text-align: center;
+}
+
+.callee-input:focus {
+  border-color: #555;
+}
+
+/* 전화 아이콘 + 링 애니메이션 */
+.phone-avatar {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  margin: 8px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #2a2a2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  position: relative;
+  transition: background 0.4s;
+}
+
+.avatar-circle.ringing  { background: #1a3a1a; }
+.avatar-circle.answered { background: #1a3a2a; }
+
+.avatar-icon {
+  font-size: 28px;
+  transition: all 0.3s;
+}
+
+.ring-wave {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #4caf82;
+  opacity: 0;
+  width: 70px;
+  height: 70px;
+}
+
+.ring-wave.active:nth-child(1) { animation: ringExpand 1.8s ease-out infinite 0s; }
+.ring-wave.active:nth-child(2) { animation: ringExpand 1.8s ease-out infinite 0.5s; }
+.ring-wave.active:nth-child(3) { animation: ringExpand 1.8s ease-out infinite 1.0s; }
+
+@keyframes ringExpand {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.call-duration {
+  font-size: 13px;
+  color: #4caf82;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+}
+
+.caller-info {
+  font-size: 14px;
+  color: #bbb;
+  text-align: center;
+}
+
+.call-buttons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.btn-call {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #2e7d52;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-call:hover { background: #38a066; }
+
+.btn-absent {
+  background: #4a4a1a;
+  color: #ffd54f;
+}
+
+.btn-absent:hover { background: #5c5c20; }
+
+.btn-hangup {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #7d2e2e;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-hangup:hover { background: #a03838; }
+
+.mic-status {
+  font-size: 12px;
+  color: #4caf82;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mic-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4caf82;
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* 캘린더 카드 */
+.calendar-card {
+  background: #222;
+  border-radius: 12px;
+  padding: 16px;
+  flex: 1;
+}
+
+.section-title {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 12px;
+}
+
+.event-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.event-list .empty {
+  font-size: 13px;
+  color: #555;
+  text-align: center;
+  padding: 12px 0;
+}
+
+.event-item {
+  background: #2a2a1a;
+  border-left: 3px solid #ffb74d;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.event-item .event-time {
+  color: #ffb74d;
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.event-item .event-title {
+  color: #ddd;
+}
+
+/* 메인 */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #0f0f0f;
+}
+
+/* 경고 배너 */
+.alert-banner {
+  background: #3a1a1a;
+  border-bottom: 2px solid #f44336;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: #ef9a9a;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.alert-icon {
+  font-size: 18px;
+}
+
+/* 핸드폰 래퍼 */
+.phone-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+}
+
+/* 핸드폰 프레임 */
+.phone-frame {
+  width: 320px;
+  height: 620px;
+  background: #111;
+  border-radius: 48px;
+  border: 3px solid #333;
+  box-shadow:
+    0 0 0 1px #1a1a1a,
+    0 30px 80px rgba(0,0,0,0.8),
+    inset 0 0 0 1px #2a2a2a;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 상단 노치 */
+.phone-top {
+  height: 40px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.phone-speaker {
+  width: 60px;
+  height: 5px;
+  background: #2a2a2a;
+  border-radius: 3px;
+}
+
+.phone-camera {
+  width: 10px;
+  height: 10px;
+  background: #1e1e1e;
+  border-radius: 50%;
+  border: 1px solid #333;
+}
+
+/* 통화 상태 */
+.phone-call-status {
+  background: #111;
+  padding: 16px 20px 12px;
+  text-align: center;
+  flex-shrink: 0;
+  border-bottom: 1px solid #1e1e1e;
+}
+
+.phone-caller-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.phone-call-info {
+  font-size: 12px;
+  color: #4caf82;
+  min-height: 16px;
+}
+
+.phone-call-time {
+  font-size: 13px;
+  color: #888;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+}
+
+/* 메시지 영역 */
+.phone-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #111;
+  scrollbar-width: none;
+}
+
+.phone-messages::-webkit-scrollbar { display: none; }
+
+.chat-empty {
+  color: #444;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 60px;
+  line-height: 1.8;
+}
+
+/* 하단 홈바 */
+.phone-bottom-bar {
+  height: 28px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.phone-home-bar {
+  width: 100px;
+  height: 4px;
+  background: #333;
+  border-radius: 2px;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-width: 80%;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.message.caller  { align-self: flex-start; }
+.message.agent   { align-self: flex-end; }
+.message.user    { align-self: flex-start; }
+.message.system  { align-self: center; }
+
+.message-label {
+  font-size: 10px;
+  color: #555;
+  padding: 0 4px;
+}
+
+.message.agent .message-label { text-align: right; }
+.message.system .message-label { text-align: center; }
+
+.message-bubble {
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.message.caller .message-bubble  { background: #2a2a2a; color: #ddd; border-radius: 4px 12px 12px 12px; }
+.message.agent .message-bubble   { background: #1a3a2a; color: #a5d6b8; border-radius: 12px 4px 12px 12px; }
+.message.user .message-bubble    { background: #1a2a3a; color: #90caf9; border-radius: 4px 12px 12px 12px; }
+.message.system .message-bubble  { background: #2a2a2a; color: #888; font-size: 12px; border-radius: 20px; }
+
+/* 입력 중 표시 */
+.typing .message-bubble::after {
+  content: '●●●';
+  font-size: 10px;
+  animation: typing 1s infinite;
+  letter-spacing: 2px;
+}
+
+@keyframes typing {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* API 키 바 */
+.api-key-bar {
+  padding: 12px 24px;
+  border-top: 1px solid #2a2a2a;
+  background: #1a1a1a;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #666;
+}
+
+.api-key-bar input {
+  flex: 1;
+  background: #222;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #ddd;
+  font-size: 13px;
+  outline: none;
+}
+
+.api-key-bar input:focus {
+  border-color: #555;
+}
+
+.api-key-bar button {
+  padding: 8px 16px;
+  background: #333;
+  border: none;
+  border-radius: 8px;
+  color: #ddd;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.api-key-bar button:hover {
+  background: #444;
+}
+
+.api-key-status {
+  font-size: 12px;
+  color: #4caf82;
+}
+
+/* 유틸 */
+.hidden { display: none !important; }
